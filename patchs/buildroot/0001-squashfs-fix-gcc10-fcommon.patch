@@ -1,0 +1,29 @@
+From 240c5664683b79ce8c01dec375126d471aa6aa5c Mon Sep 17 00:00:00 2001
+From: Czzqq <chenlthree@gmail.com>
+Date: Tue, 31 Mar 2026 22:00:06 +0800
+Subject: [PATCH] buildroot: squashfs: fixup compile gcc10 fcommon
+
+---
+ package/squashfs/0003-fix-gcc10-fcommon.patch | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ create mode 100644 package/squashfs/0003-fix-gcc10-fcommon.patch
+
+diff --git a/package/squashfs/0003-fix-gcc10-fcommon.patch b/package/squashfs/0003-fix-gcc10-fcommon.patch
+new file mode 100644
+index 00000000..dc796ee0
+--- /dev/null
++++ b/package/squashfs/0003-fix-gcc10-fcommon.patch
+@@ -0,0 +1,10 @@
++--- a/squashfs-tools/Makefile
+++++ b/squashfs-tools/Makefile
++@@ -142,6 +142,7 @@ INSTALL_MANPAGES_DIR = $(INSTALL_DIR)/share/man/man1
++ 
++ CFLAGS ?= -O2
++ CFLAGS += $(EXTRA_CFLAGS) $(INCLUDEDIR) -D_FILE_OFFSET_BITS=64 \
+++	-fcommon \
++ 	-D_LARGEFILE_SOURCE -D_GNU_SOURCE -DCOMP_DEFAULT=\"$(COMP_DEFAULT)\" \
++ 	-Wall
++ 
+-- 
+2.53.0
+
