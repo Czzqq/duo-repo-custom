@@ -25,7 +25,9 @@ RUN apt update && apt install -y --fix-missing repo git ssh libssl-dev liblz4-to
  qemu-user-static live-build bison flex fakeroot cmake \
  unzip device-tree-compiler python3 python3-pip ncurses-dev python3-pyelftools \
  subversion asciidoc w3m dblatex graphviz python3-matplotlib cpio \
- libparse-yapp-perl default-jre patchutils swig expect-dev u-boot-tools
+ libparse-yapp-perl default-jre patchutils swig expect-dev u-boot-tools \
+ gcc-multilib g++-multilib libgucharmap-2-90-dev bzip2 expat gpgv2 libgmp-dev \
+ libmpc-dev python3-setuptools python3-dev gettext
 
 
 # custom install
