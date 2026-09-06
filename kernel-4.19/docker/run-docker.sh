@@ -11,9 +11,9 @@ fi
 docker run \
   --privileged \
   --network host \
-  -e http_proxy=http://127.0.0.1:7890 \
-  -e https_proxy=http://127.0.0.1:7890 \
-  --mount type=bind,source=/home/zane/Workspace/sdk/tspi/tspi_repo,target=/home/tspi \
+  -e http_proxy=http://192.168.0.191:7890 \
+  -e https_proxy=http://192.168.0.191:7890 \
+  --mount type=bind,source=/home/zane/Workspace/project/tspi/linux_sdk,target=/home/tspi \
   --name="tspiv2-dev" \
   --hostname tspi \
   -it \
