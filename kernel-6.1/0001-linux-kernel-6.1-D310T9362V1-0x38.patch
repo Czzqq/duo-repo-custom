@@ -1,0 +1,837 @@
+diff --git a/arch/arm64/boot/dts/rockchip/tspi-rk3566-dsi-v10.dtsi b/arch/arm64/boot/dts/rockchip/tspi-rk3566-dsi-v10.dtsi
+index 40cc079ea471..0658f59387d2 100644
+--- a/arch/arm64/boot/dts/rockchip/tspi-rk3566-dsi-v10.dtsi
++++ b/arch/arm64/boot/dts/rockchip/tspi-rk3566-dsi-v10.dtsi
+@@ -12,40 +12,41 @@ backlight: backlight {
+ 		compatible = "pwm-backlight";
+ 		pwms = <&pwm5 0 25000 0>;
+ 		brightness-levels = <
+-			  0  20  20  21  21  22  22  23
+-			 23  24  24  25  25  26  26  27
+-			 27  28  28  29  29  30  30  31
+-			 31  32  32  33  33  34  34  35
+-			 35  36  36  37  37  38  38  39
+-			 40  41  42  43  44  45  46  47
+-			 48  49  50  51  52  53  54  55
+-			 56  57  58  59  60  61  62  63
+-			 64  65  66  67  68  69  70  71
+-			 72  73  74  75  76  77  78  79
+-			 80  81  82  83  84  85  86  87
+-			 88  89  90  91  92  93  94  95
+-			 96  97  98  99 100 101 102 103
+-			104 105 106 107 108 109 110 111
+-			112 113 114 115 116 117 118 119
+-			120 121 122 123 124 125 126 127
+-			128 129 130 131 132 133 134 135
+-			136 137 138 139 140 141 142 143
+-			144 145 146 147 148 149 150 151
+-			152 153 154 155 156 157 158 159
+-			160 161 162 163 164 165 166 167
+-			168 169 170 171 172 173 174 175
+-			176 177 178 179 180 181 182 183
+-			184 185 186 187 188 189 190 191
+-			192 193 194 195 196 197 198 199
+-			200 201 202 203 204 205 206 207
+-			208 209 210 211 212 213 214 215
+-			216 217 218 219 220 221 222 223
+-			224 225 226 227 228 229 230 231
+-			232 233 234 235 236 237 238 239
+-			240 241 242 243 244 245 246 247
+-			248 249 250 251 252 253 254 255
++			  0 20 20 20 20 20 20 20
++			  21 21 21 21 21 21 21 21
++			  22 22 22 22 22 22 22 22
++			  23 23 23 23 23 23 23 23
++			  24 24 24 24 24 24 24 24
++			  25 25 25 25 25 25 25 25
++			  26 26 26 26 26 26 26 26
++			  27 27 27 27 27 27 27 27
++			  28 28 28 28 28 28 28 28
++			  29 29 29 29 29 29 29 29
++			  30 30 30 30 30 30 30 30
++			  31 31 31 31 31 31 31 31
++			  32 32 32 32 32 32 32 32
++			  33 33 33 33 33 33 33 33
++			  34 34 34 34 34 34 34 34
++			  35 35 35 35 35 35 35 35
++			  36 36 36 36 36 36 36 36
++			  37 37 37 37 37 37 37 37
++			  38 38 38 38 38 38 38 38
++			  39 39 39 39 39 39 39 39
++			  40 40 40 40 40 40 40 40
++			  41 41 41 41 41 41 41 41
++			  42 42 42 42 42 42 42 42
++			  43 43 43 43 43 43 43 43
++			  44 44 44 44 44 44 44 44
++			  45 45 45 45 45 45 45 45
++			  46 46 46 46 46 46 46 46
++			  47 47 47 47 47 47 47 47
++			  48 48 48 48 48 48 48 48
++			  49 49 49 49 49 49 49 49
++			  50 50 50 50 50 50 50 50
++			  51 51 51 51 51 51 51 51
++			  256
+ 		>;
+-		default-brightness-level = <255>;
++		default-brightness-level = <192>;
+ 	};
+ };
+ 
+@@ -53,15 +54,32 @@ &pwm5 {
+ 	status = "okay";
+ };
+ 
+-
+-&pinctrl {
+-	dsi1 {
+-		dsi1_rst_gpio: dsi1-rst-gpio {
+-			rockchip,pins = <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
+-		};
++&i2c1 {
++	status = "okay";
++	clock-frequency = <400000>;
++
++	tp@38 {
++		pinctrl-0 = <&touch_gpio>;
++		status = "okay";
++		compatible = "hyn,cst128a";
++		reg = <0x38>;
++		reset-gpios = <&gpio1 RK_PA1 GPIO_ACTIVE_LOW>;
++		irq-gpios = <&gpio1 RK_PA0 IRQ_TYPE_LEVEL_LOW>;
+ 	};
+ };
+ 
++
++&pinctrl {
++	dsi1 {
++		dsi1_rst_gpio: dsi1-rst-gpio {
++			rockchip,pins = <3 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++		touch_gpio: touch-gpio {
++			rockchip,pins = <1 RK_PA0 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++};
++
+ /*
+  * video_phy1 needs to be enabled
+  * when dsi1 is enabled
+@@ -71,13 +89,11 @@ &dsi1 {
+ };
+ 
+ &dsi1_in_vp0 {
+-	status = "okay";
+-	// status = "disabled";
++	status = "disabled";
+ };
+ 
+ &dsi1_in_vp1 {
+-	status = "disabled";
+-	// status = "okay";
++	status = "okay";
+ };
+ 
+ &video_phy1 {
+@@ -86,41 +102,10 @@ &video_phy1 {
+ 
+ &route_dsi1 {
+ 	status = "okay";
+-	connect = <&vp0_out_dsi1>;
++	connect = <&vp1_out_dsi1>;
+ };
+ 
+ 
+-/************************************************************************************************************************************************
+-10-inch 
+-Default: 8-inch, 800x1280
+-************************************************************************************************************************************************/
+-&i2c1 {
+-	status = "okay";
+-	clock-frequency = <400000>;
+-	// ts@5d {
+-	// 	compatible = "goodix,gt9xx";
+-	// 	reg = <0x5d>;
+-	// 	tp-size = <89>;
+-	// 	max-x = <1280>;
+-	// 	max-y = <800>;
+-	// 	touch-gpio = <&gpio1 RK_PA0 IRQ_TYPE_LEVEL_LOW>;
+-	// 	reset-gpio = <&gpio1 RK_PA1 GPIO_ACTIVE_LOW>;
+-	// };
+-	myts@38 {
+-        compatible = "my,touch";
+-        reg = <0x38>;
+-        tp-size = <89>;
+-        max-x = <480>;
+-        max-y = <800>;
+-		// interrupt-parent = <&gpio1>;
+-        // interrupts = <0 IRQ_TYPE_EDGE_FALLING>;  // 中断引脚配置正确
+-        touch-gpio = <&gpio1 RK_PA0 IRQ_TYPE_LEVEL_LOW>;
+-		reset-gpio = <&gpio1 RK_PA1 GPIO_ACTIVE_HIGH>;
+-    };
+-
+-	
+-};
+-
+ // 10 inch
+ // &dsi1 {
+ // 	status = "okay";
+@@ -402,10 +387,10 @@ myts@38 {
+ 
+ // };
+ 
+-// 3.1 inch
+-&dsi1 {
+-        status = "okay";
+-        rockchip,lane-rate = <500>;//(480+50+60+10)*(800+20+34+2)*60*3*8/2,+100mhz
++// D310T9362V1
++&dsi1 {
++        status = "okay";
++        rockchip,lane-rate = <480>;//(480+50+60+10)*(800+20+34+2)*60*3*8/2,+100mhz
+         dsi1_panel: panel@0 {
+                 status = "okay";
+                 compatible = "simple-panel-dsi";
+@@ -517,276 +502,3 @@ dsi1_out_panel: endpoint {
+                 };
+         };
+ };
+-
+-// 8 inch 800x1280
+-// &dsi1 {
+-// 	status = "okay";
+-// 	rockchip,lane-rate = <480>;
+-// 	dsi1_panel: panel@0 {
+-// 		status = "okay";
+-// 		compatible = "simple-panel-dsi";
+-// 		reset-gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_LOW>;
+-// 		pinctrl-names = "default";
+-// 		pinctrl-0 = <&dsi1_rst_gpio>;
+-// 		reg = <0>;
+-// 		backlight = <&backlight>;
+-// 		reset-delay-ms = <10>;
+-// 		enable-delay-ms = <120>;
+-// 		prepare-delay-ms = <20>;
+-// 		unprepare-delay-ms = <20>;
+-// 		disable-delay-ms = <50>;
+-// 		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
+-// 			MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_NO_EOT_PACKET)>;
+-// 		dsi,format = <MIPI_DSI_FMT_RGB888>;
+-// 		dsi,lanes  = <4>;
+-// 		panel-init-sequence = [
+-// 			15 00 02 E0 00
+-// 			15 00 02 E1 93
+-// 			15 00 02 E2 65
+-// 			15 00 02 E3 F8
+-// 			15 00 02 80 03
+-// 			15 00 02 E0 01
+-// 			15 00 02 00 00
+-// 			15 00 02 01 3C
+-// 			15 00 02 03 10
+-// 			15 00 02 04 38
+-// 			15 00 02 0C 74
+-// 			15 00 02 17 00
+-// 			15 00 02 18 E7
+-// 			15 00 02 19 01
+-// 			15 00 02 1A 00
+-// 			15 00 02 1B E7
+-// 			15 00 02 1C 01
+-// 			15 00 02 24 FE
+-// 			15 00 02 35 23
+-// 			15 00 02 37 09
+-// 			15 00 02 38 04
+-// 			15 00 02 39 00
+-// 			15 00 02 3A 01
+-// 			15 00 02 3C 70
+-// 			15 00 02 3D FF
+-// 			15 00 02 3E FF
+-// 			15 00 02 3F 7F
+-// 			15 00 02 40 06
+-// 			15 00 02 41 A0
+-// 			15 00 02 43 1E
+-// 			15 00 02 44 0B
+-// 			15 00 02 45 28
+-// 			15 00 02 55 02
+-// 			15 00 02 57 A9
+-// 			15 00 02 59 0A
+-// 			15 00 02 5A 2D
+-// 			15 00 02 5B 19
+-// 			15 00 02 5C 15
+-// 			15 00 02 5D 7F
+-// 			15 00 02 5E 6E
+-// 			15 00 02 5F 5F
+-// 			15 00 02 60 53
+-// 			15 00 02 61 50
+-// 			15 00 02 62 41
+-// 			15 00 02 63 44
+-// 			15 00 02 64 2C
+-// 			15 00 02 65 44
+-// 			15 00 02 66 42
+-// 			15 00 02 67 40
+-// 			15 00 02 68 5B
+-// 			15 00 02 69 45
+-// 			15 00 02 6A 48
+-// 			15 00 02 6B 38
+-// 			15 00 02 6C 32
+-// 			15 00 02 6D 25
+-// 			15 00 02 6E 14
+-// 			15 00 02 6F 08
+-// 			15 00 02 70 7F
+-// 			15 00 02 71 6E
+-// 			15 00 02 72 5F
+-// 			15 00 02 73 53
+-// 			15 00 02 74 50
+-// 			15 00 02 75 41
+-// 			15 00 02 76 44
+-// 			15 00 02 77 2C
+-// 			15 00 02 78 44
+-// 			15 00 02 79 42
+-// 			15 00 02 7A 40
+-// 			15 00 02 7B 5B
+-// 			15 00 02 7C 45
+-// 			15 00 02 7D 48
+-// 			15 00 02 7E 38
+-// 			15 00 02 7F 32
+-// 			15 00 02 80 25
+-// 			15 00 02 81 14
+-// 			15 00 02 82 08
+-// 			15 00 02 E0 02
+-// 			15 00 02 00 50
+-// 			15 00 02 01 5F
+-// 			15 00 02 02 5F
+-// 			15 00 02 03 52
+-// 			15 00 02 04 77
+-// 			15 00 02 05 57
+-// 			15 00 02 06 5F
+-// 			15 00 02 07 4E
+-// 			15 00 02 08 4C
+-// 			15 00 02 09 5F
+-// 			15 00 02 0A 4A
+-// 			15 00 02 0B 48
+-// 			15 00 02 0C 5F
+-// 			15 00 02 0D 46
+-// 			15 00 02 0E 44
+-// 			15 00 02 0F 40
+-// 			15 00 02 10 5F
+-// 			15 00 02 11 5F
+-// 			15 00 02 12 5F
+-// 			15 00 02 13 5F
+-// 			15 00 02 14 5F
+-// 			15 00 02 15 5F
+-// 			15 00 02 16 51
+-// 			15 00 02 17 5F
+-// 			15 00 02 18 5F
+-// 			15 00 02 19 53
+-// 			15 00 02 1A 77
+-// 			15 00 02 1B 57
+-// 			15 00 02 1C 5F
+-// 			15 00 02 1D 4F
+-// 			15 00 02 1E 4D
+-// 			15 00 02 1F 5F
+-// 			15 00 02 20 4B
+-// 			15 00 02 21 49
+-// 			15 00 02 22 5F
+-// 			15 00 02 23 47
+-// 			15 00 02 24 45
+-// 			15 00 02 25 41
+-// 			15 00 02 26 5F
+-// 			15 00 02 27 5F
+-// 			15 00 02 28 5F
+-// 			15 00 02 29 5F
+-// 			15 00 02 2A 5F
+-// 			15 00 02 2B 5F
+-// 			15 00 02 2C 01
+-// 			15 00 02 2D 1F
+-// 			15 00 02 2E 1F
+-// 			15 00 02 2F 13
+-// 			15 00 02 30 17
+-// 			15 00 02 31 17
+-// 			15 00 02 32 1F
+-// 			15 00 02 33 0D
+-// 			15 00 02 34 0F
+-// 			15 00 02 35 1F
+-// 			15 00 02 36 05
+-// 			15 00 02 37 07
+-// 			15 00 02 38 1F
+-// 			15 00 02 39 09
+-// 			15 00 02 3A 0B
+-// 			15 00 02 3B 11
+-// 			15 00 02 3C 1F
+-// 			15 00 02 3D 1F
+-// 			15 00 02 3E 1F
+-// 			15 00 02 3F 1F
+-// 			15 00 02 40 1F
+-// 			15 00 02 41 1F
+-// 			15 00 02 42 00
+-// 			15 00 02 43 1F
+-// 			15 00 02 44 1F
+-// 			15 00 02 45 12
+-// 			15 00 02 46 17
+-// 			15 00 02 47 17
+-// 			15 00 02 48 1F
+-// 			15 00 02 49 0C
+-// 			15 00 02 4A 0E
+-// 			15 00 02 4B 1F
+-// 			15 00 02 4C 04
+-// 			15 00 02 4D 06
+-// 			15 00 02 4E 1F
+-// 			15 00 02 4F 08
+-// 			15 00 02 50 0A
+-// 			15 00 02 51 10
+-// 			15 00 02 52 1F
+-// 			15 00 02 53 1F
+-// 			15 00 02 54 1F
+-// 			15 00 02 55 1F
+-// 			15 00 02 56 1F
+-// 			15 00 02 57 1F
+-// 			15 00 02 58 40
+-// 			15 00 02 5B 10
+-// 			15 00 02 5C 06
+-// 			15 00 02 5D 40
+-// 			15 00 02 5E 00
+-// 			15 00 02 5F 00
+-// 			15 00 02 60 40
+-// 			15 00 02 61 03
+-// 			15 00 02 62 04
+-// 			15 00 02 63 6C
+-// 			15 00 02 64 6C
+-// 			15 00 02 65 75
+-// 			15 00 02 66 08
+-// 			15 00 02 67 B4
+-// 			15 00 02 68 08
+-// 			15 00 02 69 6C
+-// 			15 00 02 6A 6C
+-// 			15 00 02 6B 0C
+-// 			15 00 02 6D 00
+-// 			15 00 02 6E 00
+-// 			15 00 02 6F 88
+-// 			15 00 02 75 BB
+-// 			15 00 02 76 00
+-// 			15 00 02 77 05
+-// 			15 00 02 78 2A
+-// 			15 00 02 E0 04
+-// 			15 00 02 00 0E
+-// 			15 00 02 02 B3
+-// 			15 00 02 09 60
+-// 			15 00 02 0E 48
+-// 			15 00 02 E0 00
+-// 			05 fa 01 11
+-// 			05 32 01 29
+-// 		];
+-
+-// 		panel-exit-sequence = [
+-// 			05 00 01 28
+-// 			05 00 01 10
+-// 		];
+-
+-// 		disp_timings1: display-timings {
+-// 			native-mode = <&dsi1_timing0>;
+-// 			dsi1_timing0: timing0 {
+-// 				clock-frequency = <66000000>;
+-// 				hactive = <800>;
+-// 				vactive = <1280>;
+-// 				hfront-porch = <18>;
+-// 				hsync-len = <12>;
+-// 				hback-porch = <18>;
+-// 				vfront-porch = <24>;
+-// 				vsync-len = <4>;
+-// 				vback-porch = <12>;
+-// 				hsync-active = <0>;
+-// 				vsync-active = <0>;
+-// 				de-active = <0>;
+-// 				pixelclk-active = <1>;
+-// 			};
+-// 		};
+-
+-// 		ports {
+-// 			#address-cells = <1>;
+-// 			#size-cells = <0>;
+-
+-// 			port@0 {
+-// 				reg = <0>;
+-// 				panel_in_dsi1: endpoint {
+-// 					remote-endpoint = <&dsi1_out_panel>;
+-// 				};
+-// 			};
+-// 		};
+-// 	};
+-
+-// 	ports {
+-// 		#address-cells = <1>;
+-// 		#size-cells = <0>;
+-
+-// 		port@1 {
+-// 			reg = <1>;
+-// 			dsi1_out_panel: endpoint {
+-// 				remote-endpoint = <&panel_in_dsi1>;
+-// 			};
+-// 		};
+-// 	};
+-
+-// };
+diff --git a/arch/arm64/boot/dts/rockchip/tspi-rk3566-user-v10-linux.dts b/arch/arm64/boot/dts/rockchip/tspi-rk3566-user-v10-linux.dts
+index 59b01e1c6d00..7328e311d24f 100755
+--- a/arch/arm64/boot/dts/rockchip/tspi-rk3566-user-v10-linux.dts
++++ b/arch/arm64/boot/dts/rockchip/tspi-rk3566-user-v10-linux.dts
+@@ -25,7 +25,7 @@
+ 
+ //[ON/OFF] MIPI display screen config, users can copy and modify for their own screen
+ // Note: EDP and MIPI are mutually exclusive as they share VOP. Modify yourself if simultaneous display needed
+-// #include "tspi-rk3566-dsi-v10.dtsi"
++#include "tspi-rk3566-dsi-v10.dtsi"
+ 
+ //[ON/OFF] HDMI display screen config, rarely needs modification, comment out if HDMI not needed
+ #include "tspi-rk3566-hdmi-v10.dtsi"
+diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
+index 9a710c1318c2..1c57c8437a60 100644
+--- a/arch/arm64/configs/rockchip_linux_defconfig
++++ b/arch/arm64/configs/rockchip_linux_defconfig
+@@ -244,7 +244,8 @@ CONFIG_MOUSE_CYAPA=y
+ CONFIG_MOUSE_ELAN_I2C=y
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=y
+-CONFIG_TOUCHSCREEN_GSL3673=y
++# CONFIG_TOUCHSCREEN_GSL3673=y
++CONFIG_TOUCHSCREEN_CST128A_CUST=y
+ CONFIG_TOUCHSCREEN_GT9XX=y
+ CONFIG_TOUCHSCREEN_HYN=y
+ CONFIG_TOUCHSCREEN_ELAN=y
+diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
+index 66d4e41cd353..e105f07519ef 100644
+--- a/drivers/input/touchscreen/Kconfig
++++ b/drivers/input/touchscreen/Kconfig
+@@ -287,6 +287,7 @@ config TOUCHSCREEN_CYTTSP4_SPI
+ 	  module will be called cyttsp4_spi.
+ 
+ source "drivers/input/touchscreen/cyttsp5/Kconfig"
++source "drivers/input/touchscreen/cst128a_cust/Kconfig"
+ 
+ config TOUCHSCREEN_DA9034
+ 	tristate "Touchscreen support for Dialog Semiconductor DA9034"
+diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
+index 6105184f12cd..7aefd9465ef7 100644
+--- a/drivers/input/touchscreen/Makefile
++++ b/drivers/input/touchscreen/Makefile
+@@ -32,6 +32,7 @@ obj-$(CONFIG_TOUCHSCREEN_CYTTSP4_CORE)	+= cyttsp4_core.o
+ obj-$(CONFIG_TOUCHSCREEN_CYTTSP4_I2C)	+= cyttsp4_i2c.o cyttsp_i2c_common.o
+ obj-$(CONFIG_TOUCHSCREEN_CYTTSP4_SPI)	+= cyttsp4_spi.o
+ obj-$(CONFIG_TOUCHSCREEN_CYPRESS_CYTTSP5)	+= cyttsp5/
++obj-$(CONFIG_TOUCHSCREEN_CST128A_CUST)	+= cst128a_cust/
+ obj-$(CONFIG_TOUCHSCREEN_DA9034)	+= da9034-ts.o
+ obj-$(CONFIG_TOUCHSCREEN_DA9052)	+= da9052_tsi.o
+ obj-$(CONFIG_TOUCHSCREEN_DYNAPRO)	+= dynapro.o
+diff --git a/drivers/input/touchscreen/cst128a_cust/Kconfig b/drivers/input/touchscreen/cst128a_cust/Kconfig
+new file mode 100644
+index 000000000000..0d601df0c45c
+--- /dev/null
++++ b/drivers/input/touchscreen/cst128a_cust/Kconfig
+@@ -0,0 +1,7 @@
++config TOUCHSCREEN_CST128A_CUST
++        tristate "CST128A Touchscreen"
++	depends on I2C
++	default n
++	help
++	  Say Y here if you have CST128A touch panel.
++	  If unsure, say N.
+\ No newline at end of file
+diff --git a/drivers/input/touchscreen/cst128a_cust/Makefile b/drivers/input/touchscreen/cst128a_cust/Makefile
+new file mode 100644
+index 000000000000..1cb7a4386a2c
+--- /dev/null
++++ b/drivers/input/touchscreen/cst128a_cust/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_TOUCHSCREEN_CST128A_CUST)   += cst128a_ts.o
+diff --git a/drivers/input/touchscreen/cst128a_cust/cst128a_ts.c b/drivers/input/touchscreen/cst128a_cust/cst128a_ts.c
+new file mode 100644
+index 000000000000..9aa3947dde52
+--- /dev/null
++++ b/drivers/input/touchscreen/cst128a_cust/cst128a_ts.c
+@@ -0,0 +1,290 @@
++// SPDX-License-Identifier: GPL-2.0
++/***************************************************************
++本驱动由正点原子的ft5426驱动修改而来
++ ***************************************************************/
++#include <linux/module.h>
++#include <linux/i2c.h>
++#include <linux/input/mt.h>
++#include <linux/of_gpio.h>
++#include <linux/delay.h>
++#include <linux/interrupt.h>
++#include <linux/string.h>
++
++/* CST128寄存器相关宏定义 */
++#define CST128_DEVIDE_MODE_REG	0x00	// 模式寄存器
++#define CST128_TD_STATUS_REG    	0x02  	// 状态寄存器
++#define CST128_TOUCH_DATA_REG   	0x03   	// 触摸数据读取的起始寄存器
++#define CST128_ID_G_MODE_REG    	0xA4  	// 中断模式寄存器
++
++#define MAX_SUPPORT_POINTS		5    	// cst128最大支持5点触摸
++
++#define TOUCH_EVENT_DOWN      	0x00    // 按下
++#define TOUCH_EVENT_UP           	0x01    // 抬起
++#define TOUCH_EVENT_ON         	0x02    // 接触
++#define TOUCH_EVENT_RESERVED  	0x03    // 保留
++
++
++struct hyn_cst128_dev {
++    struct i2c_client *client;
++    struct input_dev *input;
++    int reset_gpio;
++    int irq_gpio;
++};
++
++static int hyn_cst128_ts_write(struct hyn_cst128_dev *cst128,
++            u8 addr, u8 *buf, u16 len)
++{
++    struct i2c_client *client = cst128->client;
++    struct i2c_msg msg;
++    u8 send_buf[6] = {0};
++    int ret;
++
++    send_buf[0] = addr;
++    memcpy(&send_buf[1], buf, len);
++
++    msg.flags = 0;                  //i2c写
++    msg.addr = client->addr;
++    msg.buf = send_buf;
++    msg.len = len + 1;
++
++    ret = i2c_transfer(client->adapter, &msg, 1);
++    if (1 == ret)
++        return 0;
++    else {
++        dev_err(&client->dev, "%s: write error, addr=0x%x len=%d.\n",
++                    __func__, addr, len);
++        return -1;
++    }
++}
++
++static int hyn_cst128_ts_read(struct hyn_cst128_dev *cst128,
++            u8 addr, u8 *buf, u16 len)
++{
++    struct i2c_client *client = cst128->client;
++    struct i2c_msg msg[2];
++    int ret;
++
++    msg[0].flags = 0;             	// i2c写
++    msg[0].addr = client->addr;
++    msg[0].buf = &addr;
++    msg[0].len = 1;              	// 1个字节
++
++    msg[1].flags = I2C_M_RD;    	//i2c读
++    msg[1].addr = client->addr;
++    msg[1].buf = buf;
++    msg[1].len = len;
++
++    ret = i2c_transfer(client->adapter, msg, 2);
++    if (2 == ret)
++        return 0;
++    else {
++        dev_err(&client->dev, "%s: read error, addr=0x%x len=%d.\n",
++                    __func__, addr, len);
++        return -1;
++    }
++}
++
++static int hyn_cst128_ts_reset(struct hyn_cst128_dev *cst128)
++{
++    struct i2c_client *client = cst128->client;
++    int ret;
++
++    /* 从设备树中获取复位管脚 */
++    cst128->reset_gpio = of_get_named_gpio(client->dev.of_node, "reset-gpios", 0);
++    if (!gpio_is_valid(cst128->reset_gpio)) {
++        dev_err(&client->dev, "Failed to get ts reset gpio\n");
++        return cst128->reset_gpio;
++    }
++
++    /* 申请使用管脚 */
++    ret = devm_gpio_request_one(&client->dev, cst128->reset_gpio,
++                GPIOF_OUT_INIT_HIGH, "cst128 reset");
++    if (ret < 0)
++        return ret;
++
++    msleep(20);
++    gpio_set_value_cansleep(cst128->reset_gpio, 0);    	// 拉低复位引脚
++    msleep(5);
++    gpio_set_value_cansleep(cst128->reset_gpio, 1);   	// 拉高复位引脚，结束复位
++
++    return 0;
++}
++
++static irqreturn_t hyn_cst128_ts_isr(int irq, void *dev_id)
++{
++    struct hyn_cst128_dev *cst128 = dev_id;
++    u8 rdbuf[30] = {0};
++    int i, type, x, y, id;
++    bool down;
++    int ret;
++
++    /* 读取CST128触摸点坐标从0x02寄存器开始，连续读取29个寄存器 */
++    ret = hyn_cst128_ts_read(cst128, CST128_TD_STATUS_REG, rdbuf, 29);
++    if (ret)
++        goto out;
++
++    for (i = 0; i < MAX_SUPPORT_POINTS; i++) {
++
++        u8 *buf = &rdbuf[i * 6 + 1];
++
++        /* 以第一个触摸点为例，寄存器TOUCH1_XH(地址0x03)，各bit位描述如下：
++         * bit7:6  Event flag  0:按下 1:释放 2:接触 3:没有事件
++         * bit5:4  保留
++         * bit3:0  X轴触摸点的11~8位
++         */
++        type = buf[0] >> 6;                     // 获取触摸点的Event Flag
++        if (type == TOUCH_EVENT_RESERVED)
++            continue;
++
++        y = ((buf[2] << 8) | buf[3]) & 0x0fff;
++        x = (((buf[0] << 8) | buf[1]) & 0x0fff);
++        x = 480 - x;
++
++        /* 以第一个触摸点为例，寄存器TOUCH1_YH(地址0x05)，各bit位描述如下：
++         * bit7:4  Touch ID  触摸ID，表示是哪个触摸点
++         * bit3:0  Y轴触摸点的11~8位。
++         */
++        id = (buf[2] >> 4) & 0x0f;
++        down = type != TOUCH_EVENT_UP;
++
++        input_mt_slot(cst128->input, id);
++        input_mt_report_slot_state(cst128->input, MT_TOOL_FINGER, down);
++
++        if (!down)
++            continue;
++
++        input_report_abs(cst128->input, ABS_MT_POSITION_X, x);
++        input_report_abs(cst128->input, ABS_MT_POSITION_Y, y);
++    }
++
++    input_mt_sync_frame(cst128->input);
++    input_mt_report_pointer_emulation(cst128->input, true);
++    input_sync(cst128->input);
++
++out:
++    return IRQ_HANDLED;
++}
++
++static int hyn_cst128_ts_irq(struct hyn_cst128_dev *cst128)
++{
++    struct i2c_client *client = cst128->client;
++    int ret;
++
++    /* 从设备树中获取中断管脚 */
++    cst128->irq_gpio = of_get_named_gpio(client->dev.of_node, "irq-gpios", 0);
++    if (!gpio_is_valid(cst128->irq_gpio)) {
++        dev_err(&client->dev, "Failed to get ts interrupt gpio\n");
++        return cst128->irq_gpio;
++    }
++
++    /* 申请使用管脚 */
++    ret = devm_gpio_request_one(&client->dev, cst128->irq_gpio,
++                GPIOF_IN, "cst128 interrupt");
++    if (ret < 0)
++        return ret;
++
++    /* 注册中断服务函数 */
++    ret = devm_request_threaded_irq(&client->dev, gpio_to_irq(cst128->irq_gpio),
++                NULL, hyn_cst128_ts_isr, IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
++                client->name, cst128);
++    if (ret) {
++        dev_err(&client->dev, "Failed to request touchscreen IRQ.\n");
++        return ret;
++    }
++
++    return 0;
++}
++
++static int hyn_cst128_ts_probe(struct i2c_client *client,
++            const struct i2c_device_id *id)
++{
++    struct hyn_cst128_dev *cst128;
++    struct input_dev *input;
++    u8 data;
++    int ret;
++
++    /* 实例化一个struct hyn_cst128_dev对象 */
++    cst128 = devm_kzalloc(&client->dev, sizeof(struct hyn_cst128_dev), GFP_KERNEL);
++    if (!cst128) {
++        dev_err(&client->dev, "Failed to allocate cst128 driver data.\n");
++        return -ENOMEM;
++    }
++
++    cst128->client = client;
++
++    /* 复位CST128触摸芯片 */
++    ret = hyn_cst128_ts_reset(cst128);
++    if (ret)
++        return ret;
++
++    msleep(5);
++
++    /* 初始化CST128 */
++    data = 0;
++    hyn_cst128_ts_write(cst128, CST128_DEVIDE_MODE_REG, &data, 1);
++    data = 1;
++    hyn_cst128_ts_write(cst128, CST128_ID_G_MODE_REG, &data, 1);
++
++    /* 申请、注册中断服务函数 */
++    ret = hyn_cst128_ts_irq(cst128);
++    if (ret)
++        return ret;
++
++    /* 注册input设备 */
++    input = devm_input_allocate_device(&client->dev);
++    if (!input) {
++        dev_err(&client->dev, "Failed to allocate input device.\n");
++        return -ENOMEM;
++    }
++
++    cst128->input = input;
++    input->name = "CST128 TouchScreen";
++    input->id.bustype = BUS_I2C;
++
++    input_set_abs_params(input, ABS_MT_POSITION_X,
++                0, 480, 0, 0);
++    input_set_abs_params(input, ABS_MT_POSITION_Y,
++                0, 800, 0, 0);
++
++    ret = input_mt_init_slots(input, MAX_SUPPORT_POINTS, INPUT_MT_DIRECT);
++    if (ret) {
++        dev_err(&client->dev, "Failed to init MT slots.\n");
++        return ret;
++    }
++
++    ret = input_register_device(input);
++    if (ret)
++        return ret;
++
++    i2c_set_clientdata(client, cst128);
++    return 0;
++}
++
++static void hyn_cst128_ts_remove(struct i2c_client *client)
++{
++    struct hyn_cst128_dev *cst128 = i2c_get_clientdata(client);
++    input_unregister_device(cst128->input);
++    return;
++}
++
++static const struct of_device_id hyn_cst128_of_match[] = {
++    { .compatible = "hyn,cst128a", },
++    { /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, hyn_cst128_of_match);
++
++static struct i2c_driver hyn_cst128_ts_driver = {
++    .driver = {
++        .owner     		= THIS_MODULE,
++        .name          	= "hyn_cst128a",
++        .of_match_table	= of_match_ptr(hyn_cst128_of_match),
++    },
++    .probe    = hyn_cst128_ts_probe,
++    .remove   = hyn_cst128_ts_remove,
++};
++
++module_i2c_driver(hyn_cst128_ts_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("leefei");
++MODULE_INFO(intree, "Y");
