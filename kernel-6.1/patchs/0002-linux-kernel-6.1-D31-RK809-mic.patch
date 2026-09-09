@@ -1,0 +1,12 @@
+diff --git a/arch/arm64/boot/dts/rockchip/tspi-rk3566-core-v10.dtsi b/arch/arm64/boot/dts/rockchip/tspi-rk3566-core-v10.dtsi
+index 8fe5c053e8c4..2b7941b50db0 100755
+--- a/arch/arm64/boot/dts/rockchip/tspi-rk3566-core-v10.dtsi
++++ b/arch/arm64/boot/dts/rockchip/tspi-rk3566-core-v10.dtsi
+@@ -604,7 +604,6 @@ rk809_codec: codec {
+ 			pinctrl-0 = <&i2s1m0_mclk>;
+ 			hp-volume = <20>;
+ 			spk-volume = <3>;
+-			mic-in-differential;
+ 			status = "okay";
+ 		};
+ 	};
