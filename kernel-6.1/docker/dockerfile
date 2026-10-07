@@ -23,7 +23,7 @@ RUN apt install -y build-essential crossbuild-essential-arm64 \
 RUN apt update && apt install -y --fix-missing repo git ssh libssl-dev liblz4-tool lib32stdc++6 \
  expect patchelf chrpath gawk texinfo diffstat binfmt-support \
  qemu-user-static live-build bison flex fakeroot cmake \
- unzip device-tree-compiler python3 python3-pip ncurses-dev python3-pyelftools \
+ unzip device-tree-compiler python3 python3-pip python3-venv ncurses-dev python3-pyelftools \
  subversion asciidoc w3m dblatex graphviz python3-matplotlib cpio \
  libparse-yapp-perl default-jre patchutils swig expect-dev u-boot-tools \
  gcc-multilib g++-multilib libgucharmap-2-90-dev bzip2 expat gpgv2 libgmp-dev \
